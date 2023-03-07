@@ -26,17 +26,23 @@ export class App extends Component {
 
   submitForm = e => {
     e.preventDefault();
-    this.state.contacts.map(item => {
-      if (item.name !== this.state.name) {
-        return this.setState(prevState => ({
-          contacts: [
-            ...prevState.contacts,
-            { id: nanoid(), name: this.state.name, number: this.state.number },
-          ],
-        }));
+    for (const item of this.state.contacts) {
+      if (item.name === this.state.name) {
+        console.log('YES');
+        return;
       }
-      console.log('fsfjsj');
-    });
+    }
+
+    return this.setState(prevState => ({
+      contacts: [
+        ...prevState.contacts,
+        {
+          id: nanoid(),
+          name: this.state.name,
+          number: this.state.number,
+        },
+      ],
+    }));
   };
 
   onDelete = id => {
