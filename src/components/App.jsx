@@ -3,8 +3,6 @@ import { nanoid } from 'nanoid';
 import { ContactList } from './contactList/ContactList';
 import { ContactForm } from './сontactForm/ContactForm';
 
-// import
-
 export class App extends Component {
   state = {
     contacts: [
@@ -14,20 +12,21 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  addItem = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+  changeFilter = e => {
+    this.setState({ filter: e.target.value });
   };
 
-  submitForm = e => {
-    e.preventDefault();
+  onDelete = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(itemId => itemId.id !== id),
+    }));
+  };
+
+  testName = data => {
     for (const item of this.state.contacts) {
-      if (item.name === this.state.name) {
+      if (item.name === data.name) {
         console.log('YES');
         return;
       }
@@ -38,16 +37,10 @@ export class App extends Component {
         ...prevState.contacts,
         {
           id: nanoid(),
-          name: this.state.name,
-          number: this.state.number,
+          name: data.name,
+          number: data.number,
         },
       ],
-    }));
-  };
-
-  onDelete = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(itemId => itemId.id !== id),
     }));
   };
 
@@ -59,20 +52,9 @@ export class App extends Component {
     });
 
     return (
-      <div
-        className="main-div"
-        // style={{
-        //   // height: '100vh',
-        //   display: 'flex',
-        //   flexDirection: 'column',
-        //   justifyContent: 'center',
-        //   alignItems: 'center',
-        //   fontSize: 40,
-        //   color: '#010101',
-        // }}
-      >
+      <div className="main-div">
         <h1>Phonebook</h1>
-        <ContactForm submit={this.submitForm} addItem={this.addItem} />
+        <ContactForm filter={this.changeFilter} testName={this.testName} />
         <h2>Contacts</h2>
         <ul>
           <ContactList arr={filterArr} deleteF={this.onDelete} />
